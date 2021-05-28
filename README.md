@@ -32,7 +32,7 @@
 - `make start`
 
 5. PostgreSQL в докере
-- создать роль и БД, см. пример initiate_db
+- создать роль и БД
 ```  
 sudo -u postgres psql
 
@@ -44,10 +44,11 @@ create database eapteka_db owner eapteka;
 
 \q
 ```
-- выполнить `python manage.py makemigrations` для создания миграции
-- выполнить `python manage.py migrate` для накатки миграций
-- выполнить `python manage.py createsuperuser` для создания суперюзера
+- `python manage.py makemigrations` для создания миграции
+- `python manage.py migrate` для накатки миграций
+- `python manage.py createsuperuser` для создания суперюзера
 
+6. Для загрузки первоначальных данных `python manage.py upload_initial_data`
 
 ## Links for localhost
 [Admin page](http://localhost:8000/admin)

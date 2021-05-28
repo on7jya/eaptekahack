@@ -1,7 +1,7 @@
 from django.db import models
 
-
 # Create your models here.
+
 
 class Basket(models.Model):
     ORDER_ID = models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
@@ -9,6 +9,10 @@ class Basket(models.Model):
     QUANTITY = models.FloatField
     PRICE = models.FloatField
     DETAIL_PAGE_URL = models.CharField(max_length=200)
+
+    class Meta:
+        verbose_name = 'Корзина'
+        verbose_name_plural = 'Корзины'
 
 
 class Orders(models.Model):
@@ -19,10 +23,18 @@ class Orders(models.Model):
     LID = models.CharField(max_length=200)
     USER_ID = models.IntegerField
 
+    class Meta:
+        verbose_name = 'Заказ'
+        verbose_name_plural = 'Заказы'
+
 
 class Products(models.Model):
     ID = models.IntegerField(primary_key=True)
     NAME = models.CharField(max_length=200)
+
+    class Meta:
+        verbose_name = 'Товар'
+        verbose_name_plural = 'Товары'
 
 
 class Property(models.Model):
@@ -30,14 +42,23 @@ class Property(models.Model):
     CODE = models.CharField(max_length=200)
     NAME = models.CharField(max_length=200)
 
+    class Meta:
+        verbose_name = 'Параметр'
+        verbose_name_plural = 'Параметры'
+
 
 class PropertyMultipleValues(models.Model):
-    IBLOCK_ELEMENT_ID = models.IntegerField(primary_key=True)
-    IBLOCK_PROPERTY_ID = models.IntegerField(primary_key=True)
-    VALUE = models.IntegerField(primary_key=True)
+    ID = models.IntegerField(primary_key=True)
+    IBLOCK_ELEMENT_ID = models.IntegerField()
+    IBLOCK_PROPERTY_ID = models.IntegerField()
+    VALUE = models.IntegerField()
     VALUE_ENUM = models.CharField(max_length=200)  # ?????
     VALUE_NUM = models.FloatField
     DESCRIPTION = models.CharField(max_length=200)
+
+    class Meta:
+        verbose_name = 'Параметр с несколькими значениями'
+        verbose_name_plural = 'Параметры с несколькими значениями'
 
 
 class PropertyValues(models.Model):
@@ -64,3 +85,7 @@ class PropertyValues(models.Model):
     PROPERTY_567 = models.CharField(max_length=200)
     PROPERTY_332 = models.CharField(max_length=200)
     PROPERTY_283 = models.CharField(max_length=200)
+
+    class Meta:
+        verbose_name = 'Значения параметра'
+        verbose_name_plural = 'Значения параметров'

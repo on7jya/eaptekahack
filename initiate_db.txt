@@ -1,9 +1,0 @@
-sudo -u postgres psql
-
-create user eapteka with password '1234';
-alter role eapteka set client_encoding to 'utf8';
-alter role eapteka set default_transaction_isolation to 'read committed';
-alter role eapteka set timezone to 'UTC';
-create database eapteka_db owner eapteka;
-
-\q
