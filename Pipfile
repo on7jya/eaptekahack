@@ -21,6 +21,7 @@ celery = "==4.4.7"
 redis = "*"
 environs = "*"
 drf-yasg = "*"
+django-minio-storage = "*"
 
 [requires]
 python_version = "3.8"

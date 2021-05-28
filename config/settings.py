@@ -6,7 +6,6 @@ from environs import Env
 env = Env()
 env.read_env(override=True)
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -24,6 +23,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'drf_yasg',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -107,9 +107,25 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+
 # STATIC
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+DEFAULT_FILE_STORAGE = "minio_storage.storage.MinioMediaStorage"
+STATICFILES_STORAGE = "minio_storage.storage.MinioStaticStorage"
+
+# MINIO
+MINIO_STORAGE_ENDPOINT = env.str('MINIO_STORAGE_ENDPOINT')
+MINIO_STORAGE_ACCESS_KEY = env.str('MINIO_ACCESS_KEY')
+MINIO_STORAGE_SECRET_KEY = env.str('MINIO_SECRET_KEY')
+MINIO_STORAGE_USE_HTTPS = False
+MINIO_STORAGE_MEDIA_BUCKET_NAME = 'local-media'
+MINIO_STORAGE_MEDIA_URL = f'{env.str("MINIO_STORAGE_URL")}/{MINIO_STORAGE_MEDIA_BUCKET_NAME}'
+MINIO_STORAGE_AUTO_CREATE_MEDIA_BUCKET = True
+
+MINIO_STORAGE_STATIC_BUCKET_NAME = 'local-static'
+MINIO_STORAGE_STATIC_URL = f'{env.str("MINIO_STORAGE_URL")}/{MINIO_STORAGE_STATIC_BUCKET_NAME}'
+MINIO_STORAGE_AUTO_CREATE_STATIC_BUCKET = True
 
 # CELERY
 CELERY_BROKER_URL = env.str('CELERY_BROKER_URL')

@@ -4,6 +4,7 @@ version: '3.8'
 volumes:
   app-volume:
   db-volume:
+  minio-volume:
   sock:
 
 x-app: &eaptekahack_app
@@ -16,6 +17,13 @@ x-app-v1: &eaptekahack_app_v1
   <<: *eaptekahack_app
   volumes:
     - .:/eaptekahack
+
+x-app-v2: &eaptekahack_app_v2
+  <<: *eaptekahack_app
+  volumes:
+    - .:/eaptekahack
+    - app-volume:/eaptekahack/static/
+
 
 services:
 
@@ -33,7 +41,7 @@ services:
       - POSTGRES_PASSWORD=${DB_PASS}
     ports:
       - 5432:5432
-    command: [ "postgres", "-c", "log_statement=all" ]
+    command: ["postgres", "-c", "log_statement=all"]
 
 
   nginx:
@@ -98,7 +106,7 @@ services:
     <<: *eaptekahack_app_v1
     command: celery flower -A config:celery_app --address=0.0.0.0 --port=5555
     ports:
-      - 5555:5555
+    - 5555:5555
     depends_on:
       - celery_worker
 
@@ -107,4 +115,26 @@ services:
     image: redis:alpine
     restart: unless-stopped
     ports:
-      - 6379:6379
+        - 6379:6379
+
+
+  app_collectstatic:
+    container_name: ${COMPOSE_PROJECT_NAME}_app_collectstatic
+    <<: *eaptekahack_app_v2
+    command: python manage.py collectstatic --no-input
+    restart: on-failure
+    depends_on:
+      - minio
+
+
+  minio:
+    container_name: ${COMPOSE_PROJECT_NAME}_minio
+    image: minio/minio:latest
+    ports:
+      - 9000:9000
+    volumes:
+      - minio-volume:/data
+    environment:
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+    command: server /data

@@ -5,8 +5,9 @@
 
 ![](https://img.shields.io/badge/python-black)
 ![](https://img.shields.io/badge/django-black)
-![](https://img.shields.io/badge/drf-black)
 ![](https://img.shields.io/badge/postgres-black)
+![](https://img.shields.io/badge/drf-black)
+![](https://img.shields.io/badge/minio-black)
 ![](https://img.shields.io/badge/celery-black)
 ![](https://img.shields.io/badge/redis-black)
 
@@ -54,6 +55,10 @@ create database eapteka_db owner eapteka;
 [Admin page](http://localhost:8000/admin)
 
 [Swagger](http://localhost:8000/swagger)
+
+[ReDoc](http://localhost:8000/redoc)
+
+[Flower](http://localhost:5555/)
 
 ### Форматирование кода
 - `make format`
