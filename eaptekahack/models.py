@@ -7,7 +7,7 @@ class Products(models.Model):
 
     class Meta:
         verbose_name = 'Препарат'
-        verbose_name_plural = 'Препарат'
+        verbose_name_plural = 'Products'
         unique_together = ('ID', 'NAME')
 
 
@@ -18,7 +18,7 @@ class Property(models.Model):
 
     class Meta:
         verbose_name = 'Параметр'
-        verbose_name_plural = 'Параметры'
+        verbose_name_plural = 'Property'
 
 
 class PropertyMultipleValues(models.Model):
@@ -31,7 +31,7 @@ class PropertyMultipleValues(models.Model):
 
     class Meta:
         verbose_name = 'Параметр с несколькими значениями'
-        verbose_name_plural = 'Параметры с несколькими значениями'
+        verbose_name_plural = 'PropertyMultipleValues'
         unique_together = ('IBLOCK_ELEMENT_ID', 'IBLOCK_PROPERTY_ID', 'VALUE')
 
 
@@ -62,7 +62,7 @@ class PropertyValues(models.Model):
 
     class Meta:
         verbose_name = 'Значения параметра'
-        verbose_name_plural = 'Значения параметров'
+        verbose_name_plural = 'PropertyValues'
 
 
 class ProductMNN(models.Model):
@@ -73,5 +73,5 @@ class ProductMNN(models.Model):
 
     class Meta:
         verbose_name = 'Международное непатентованное наименование'
-        verbose_name_plural = 'Международное непатентованное наименование'
+        verbose_name_plural = 'ProductMNN'
         unique_together = ('MNN_ID', 'PRODUCT_ID')
