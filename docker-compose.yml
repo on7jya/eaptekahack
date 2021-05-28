@@ -1,0 +1,110 @@
+version: '3.8'
+
+
+volumes:
+  app-volume:
+  db-volume:
+  sock:
+
+x-app: &eaptekahack_app
+  build:
+    context: .
+    dockerfile: _docker/python_base/Dockerfile
+  image: local/eaptekahack_python
+
+x-app-v1: &eaptekahack_app_v1
+  <<: *eaptekahack_app
+  volumes:
+    - .:/eaptekahack
+
+services:
+
+  postgres:
+    container_name: ${COMPOSE_PROJECT_NAME}_postgres
+    image: postgres:alpine
+    restart: unless-stopped
+    volumes:
+      - db-volume:/var/lib/postgresql/data
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+    ports:
+      - 5432:5432
+    command: [ "postgres", "-c", "log_statement=all" ]
+
+
+  nginx:
+    container_name: ${COMPOSE_PROJECT_NAME}_nginx
+    build: _docker/nginx
+    image: local/eaptekahack_nginx
+    ports:
+      - 8000:8000
+    volumes:
+      - sock:/sock
+    depends_on:
+      - app
+
+  app:
+    container_name: ${COMPOSE_PROJECT_NAME}_app
+    <<: *eaptekahack_app
+    build:
+      context: .
+      dockerfile: _docker/app/Dockerfile
+    image: local/eaptekahack_app
+    volumes:
+      - sock:/sock
+      - .:/eaptekahack
+      - app-volume:/eaptekahack/static/
+    command: gunicorn --reload -u u_app -g g_app -m 0660 -b unix:/sock/docker.sock -w 1 -n eaptekahack config.wsgi
+    depends_on:
+      - postgres
+      - redis
+
+
+  app_migration:
+    container_name: ${COMPOSE_PROJECT_NAME}_app_migration
+    <<: *eaptekahack_app_v1
+    command: bash -c "python manage.py migrate"
+    restart: on-failure
+    depends_on:
+      - postgres
+
+
+
+  celery_worker:
+    container_name: ${COMPOSE_PROJECT_NAME}_celery_worker
+    <<: *eaptekahack_app_v1
+    command: celery worker -A config:celery_app -l info --concurrency=10 -n worker1@%h
+    environment:
+      - PYTHONWARNINGS=ignore
+    expose:
+      - 8001
+    depends_on:
+      - app_migration
+      - redis
+
+  celery_beat:
+    container_name: ${COMPOSE_PROJECT_NAME}_celery_beat
+    <<: *eaptekahack_app_v1
+    command: celery beat -A config:celery_app -l info -s /var/run/celerybeat-schedule --pidfile=/var/run/celerybeat.pid
+    depends_on:
+      - celery_worker
+
+  flower:
+    container_name: ${COMPOSE_PROJECT_NAME}_flower
+    <<: *eaptekahack_app_v1
+    command: celery flower -A config:celery_app --address=0.0.0.0 --port=5555
+    ports:
+      - 5555:5555
+    depends_on:
+      - celery_worker
+
+  redis:
+    container_name: ${COMPOSE_PROJECT_NAME}_redis
+    image: redis:alpine
+    restart: unless-stopped
+    ports:
+      - 6379:6379
