@@ -48,7 +48,7 @@ create database eapteka_db owner eapteka;
 - `python manage.py migrate` для накатки миграций
 - `python manage.py createsuperuser` для создания суперюзера
 
-6. Для загрузки первоначальных данных `python manage.py upload_initial_data`
+6. Для загрузки первоначальных данных `python manage.py upload_data`
 
 ## Links for localhost
 [Admin page](http://localhost:8000/admin)

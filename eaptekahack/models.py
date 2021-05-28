@@ -1,46 +1,20 @@
 from django.db import models
 
-# Create your models here.
-
-
-class Basket(models.Model):
-    ORDER_ID = models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
-    PRODUCT_ID = models.CharField(max_length=200)
-    QUANTITY = models.FloatField
-    PRICE = models.FloatField
-    DETAIL_PAGE_URL = models.CharField(max_length=200)
-
-    class Meta:
-        verbose_name = 'Корзина'
-        verbose_name_plural = 'Корзины'
-
-
-class Orders(models.Model):
-    ID = models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
-    PERSON_TYPE_ID = models.IntegerField
-    DATE_INSERT = models.DateTimeField
-    STATUS_ID = models.CharField(max_length=1)
-    LID = models.CharField(max_length=200)
-    USER_ID = models.IntegerField
-
-    class Meta:
-        verbose_name = 'Заказ'
-        verbose_name_plural = 'Заказы'
-
 
 class Products(models.Model):
-    ID = models.IntegerField(primary_key=True)
-    NAME = models.CharField(max_length=200)
+    ID = models.IntegerField()
+    NAME = models.CharField(max_length=512)
 
     class Meta:
-        verbose_name = 'Товар'
-        verbose_name_plural = 'Товары'
+        verbose_name = 'Препарат'
+        verbose_name_plural = 'Препарат'
+        unique_together = ('ID', 'NAME')
 
 
 class Property(models.Model):
     ID = models.IntegerField(primary_key=True)
-    CODE = models.CharField(max_length=200)
-    NAME = models.CharField(max_length=200)
+    CODE = models.CharField(max_length=512)
+    NAME = models.CharField(max_length=512)
 
     class Meta:
         verbose_name = 'Параметр'
@@ -48,44 +22,56 @@ class Property(models.Model):
 
 
 class PropertyMultipleValues(models.Model):
-    ID = models.IntegerField(primary_key=True)
     IBLOCK_ELEMENT_ID = models.IntegerField()
-    IBLOCK_PROPERTY_ID = models.IntegerField()
-    VALUE = models.IntegerField()
-    VALUE_ENUM = models.CharField(max_length=200)  # ?????
-    VALUE_NUM = models.FloatField
-    DESCRIPTION = models.CharField(max_length=200)
+    IBLOCK_PROPERTY_ID = models.CharField(max_length=512)
+    VALUE = models.CharField(max_length=512, null=True, blank=True)
+    VALUE_ENUM = models.CharField(max_length=512, null=True, blank=True)
+    VALUE_NUM = models.FloatField(null=True, blank=True)
+    DESCRIPTION = models.CharField(max_length=512, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Параметр с несколькими значениями'
         verbose_name_plural = 'Параметры с несколькими значениями'
+        unique_together = ('IBLOCK_ELEMENT_ID', 'IBLOCK_PROPERTY_ID', 'VALUE')
 
 
 class PropertyValues(models.Model):
-    IBLOCK_ELEMENT_ID = models.IntegerField(primary_key=True)
-    PROPERTY_276 = models.CharField(max_length=200)
-    PROPERTY_429 = models.CharField(max_length=200)
-    PROPERTY_326 = models.CharField(max_length=200)
-    PROPERTY_574 = models.CharField(max_length=200)
-    PROPERTY_265 = models.CharField(max_length=200)
-    PROPERTY_284 = models.CharField(max_length=200)
-    PROPERTY_541 = models.CharField(max_length=200)
-    PROPERTY_542 = models.CharField(max_length=200)
-    PROPERTY_343 = models.CharField(max_length=200)
-    PROPERTY_428 = models.CharField(max_length=200)
-    PROPERTY_274 = models.CharField(max_length=200)
-    PROPERTY_263 = models.CharField(max_length=200)
-    PROPERTY_264 = models.CharField(max_length=200)
-    PROPERTY_594 = models.CharField(max_length=200)
-    PROPERTY_344 = models.CharField(max_length=200)
-    PROPERTY_483 = models.CharField(max_length=200)
-    PROPERTY_536 = models.CharField(max_length=200)
-    PROPERTY_540 = models.CharField(max_length=200)
-    PROPERTY_356 = models.CharField(max_length=200)
-    PROPERTY_567 = models.CharField(max_length=200)
-    PROPERTY_332 = models.CharField(max_length=200)
-    PROPERTY_283 = models.CharField(max_length=200)
+    IBLOCK_ELEMENT_ID = models.IntegerField(unique=True)
+    PROPERTY_276 = models.CharField(max_length=512, blank=True, null=True)
+    PROPERTY_429 = models.CharField(max_length=512, blank=True, null=True)
+    PROPERTY_326 = models.CharField(max_length=512, blank=True, null=True)
+    PROPERTY_574 = models.CharField(max_length=512, blank=True, null=True)
+    PROPERTY_265 = models.CharField(max_length=512, blank=True, null=True)
+    PROPERTY_284 = models.CharField(max_length=512, blank=True, null=True)
+    PROPERTY_541 = models.CharField(max_length=512, blank=True, null=True)
+    PROPERTY_542 = models.CharField(max_length=512, blank=True, null=True)
+    PROPERTY_343 = models.CharField(max_length=512, blank=True, null=True)
+    PROPERTY_428 = models.CharField(max_length=512, blank=True, null=True)
+    PROPERTY_274 = models.CharField(max_length=512, blank=True, null=True)
+    PROPERTY_263 = models.FloatField(blank=True, null=True)
+    PROPERTY_264 = models.CharField(max_length=512, blank=True, null=True)
+    PROPERTY_594 = models.CharField(max_length=512, blank=True, null=True)
+    PROPERTY_344 = models.CharField(max_length=512, blank=True, null=True)
+    PROPERTY_483 = models.FloatField(max_length=512, blank=True, null=True)
+    PROPERTY_536 = models.CharField(max_length=512, blank=True, null=True)
+    PROPERTY_540 = models.CharField(max_length=512, blank=True, null=True)
+    PROPERTY_356 = models.CharField(max_length=512, blank=True, null=True)
+    PROPERTY_567 = models.CharField(max_length=512, blank=True, null=True)
+    PROPERTY_332 = models.CharField(max_length=512, blank=True, null=True)
+    PROPERTY_283 = models.CharField(max_length=512, blank=True, null=True)
 
     class Meta:
         verbose_name = 'Значения параметра'
         verbose_name_plural = 'Значения параметров'
+
+
+class ProductMNN(models.Model):
+    MNN_ID = models.CharField(max_length=512)
+    PRODUCT_ID = models.IntegerField(blank=True, null=True)
+    MNN_NAME = models.CharField('Наименование', max_length=512, blank=True, null=True)
+    MNN_CODE = models.CharField('Код', max_length=512, blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'Международное непатентованное наименование'
+        verbose_name_plural = 'Международное непатентованное наименование'
+        unique_together = ('MNN_ID', 'PRODUCT_ID')
