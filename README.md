@@ -60,5 +60,9 @@ create database eapteka_db owner eapteka;
 
 [Flower](http://localhost:5555/)
 
+Example request:
+
+curl -X GET "http://127.0.0.1:8000/api/course/" -H  "accept: application/json" -H  "X-CSRFToken: ZbLfdjXm1B3m4EP3ty7KXf9jvpwLHgBBcG49SmXZ32EV6QoY1BMjcKwkD7XVJ8vy"
+
 ### Форматирование кода
 - `make format`
