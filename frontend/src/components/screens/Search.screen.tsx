@@ -15,10 +15,10 @@ export default function Search({ navigation }: any) {
         <View>
             <Text >{item.text}</Text>
             <Text>{item.price + 'руб.'}</Text>
+            {/* <Button onClick={() => handleCreateCourse()} value={}/> */}
         </View>
     );
     return (
-
         <View>
             <Input
                 onChangeText={(e) => { setDrugName(e) }}

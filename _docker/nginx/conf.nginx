@@ -7,9 +7,9 @@ server {
     listen 8000;
     client_max_body_size 4G;
     keepalive_timeout 5;
-    add_header "Access-Control-Allow-Origin" "*" always;
-    add_header "Access-Control-Allow-Headers" "Content-Type" always;
-
+    add_header Access-Control-Allow-Origin * always;
+    add_header Access-Control-Allow-Headers Content-Type always;
+    add_header Referrer-Policy "no-referrer" always;
     root /eaptekahack;
 
     location / {
