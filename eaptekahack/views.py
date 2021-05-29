@@ -1,8 +1,9 @@
 from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin, UpdateModelMixin
 from rest_framework.viewsets import GenericViewSet
+from sympy import Sum
 
 from config.settings import DEBUG
-from eaptekahack.models import TreatmentCourse, MedicationAvailable, CourseProgress
+from eaptekahack.models import TreatmentCourse, CourseProgress, Orders, PropertyValues
 from eaptekahack.serializers.course_progress import CourseProgressSerializer
 from eaptekahack.serializers.medication_available import MedicationAvailableSerializer
 from eaptekahack.serializers.treatment_course import TreatmentCourseSerializer
@@ -24,11 +25,15 @@ class MedicationAvailableViewSet(GenericViewSet, ListModelMixin, CreateModelMixi
     serializer_class = MedicationAvailableSerializer
 
     def get_queryset(self):
-        if DEBUG:
-            queryset = MedicationAvailable.objects.all()
-        else:
-            queryset = MedicationAvailable.objects.filter(user=self.request.user)
-        return queryset
+        # def get_medication_available(med_id, user_id):
+        initial_value, number_per_time = TreatmentCourse.objects.filter(user=self.request.user, drug=self.request.drug).values_list(
+            'quantity_exists',
+            'quantity',
+            flat=True)
+        times_medication_was_taken = len(CourseProgress.objects.filter(user=self.request.user, drug=self.request.drug, has_taken=True))
+        sum_quantity_of_purchased_drug = Orders.objects.filter(user=self.request.user, drug=self.request.drug).aggregate(Sum('quantity'))
+        number_per_package = PropertyValues.objects.filter(IBLOCK_ELEMENT_ID=self.request.drug).values_list('PROPERTY_540', flat=True)
+        return initial_value - times_medication_was_taken*number_per_time + sum_quantity_of_purchased_drug*number_per_package
 
 
 class CourseProgressViewSet(GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin):

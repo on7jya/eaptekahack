@@ -1,9 +1,8 @@
+from abc import ABC
+
 from rest_framework import serializers
 
-from eaptekahack.models import MedicationAvailable
 
+class MedicationAvailableSerializer(serializers.Serializer, ABC):
+    model_input = serializers.IntegerField()
 
-class MedicationAvailableSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MedicationAvailable
-        fields = ['user', 'drug', 'number_of_pills']
