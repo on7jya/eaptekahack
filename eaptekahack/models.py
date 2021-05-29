@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+from eaptekahack.constants import EventChoices
+
 
 class Products(models.Model):
     ID = models.IntegerField()
@@ -87,6 +89,18 @@ class User(AbstractUser):
 
 
 class TreatmentCourse(models.Model):
+    """
+    schedule_info:
+        {
+                "start_date": "DD.MM.YYYY", (default: текущая дата),
+                "time": ["08:00","12:00","20:00",],
+                "repeat_limit": {. — Предел генерации
+                    "date": "DD.MM.YYYY",  — Генерировать до определенной даты
+                    "count": "number. — Генерировать определенное количество раз
+                }
+         }
+    """
+
     user = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='Юзер', related_name='treatment_course',)
     drug = models.ForeignKey(
         'Products', on_delete=models.CASCADE, verbose_name='Препарат', related_name='treatment_course',
@@ -94,7 +108,55 @@ class TreatmentCourse(models.Model):
     schedule_info = models.JSONField('График приема лекарств', default=dict)
     quantity = models.DecimalField('Количество единиц для приема', max_digits=9, decimal_places=3)
     quantity_exists = models.DecimalField('Количество единиц в наличии', max_digits=9, decimal_places=3)
+    number_of_events = models.IntegerField('Количество событий приема', blank=True, null=True)
+    is_active = models.BooleanField('Активный курс?', default=True)
+    is_enabled_for_generation = models.BooleanField('Генерировать события?', default=True)
 
     class Meta:
         verbose_name = 'Курс приема'
         verbose_name_plural = 'Курс приема'
+
+
+class EventForReminder(models.Model):
+    """
+    События
+    """
+
+    course = models.ForeignKey(
+        'TreatmentCourse', on_delete=models.CASCADE, verbose_name='Курс', related_name='reminder',
+    )
+    planned_datetime = models.DateTimeField('Дата и время события')
+    event_code = models.CharField(
+        'Инициализирующее событие', max_length=50, choices=EventChoices.choices, db_index=True
+    )
+    is_success = models.BooleanField('Событие успешно?', default=False)
+    comment = models.TextField('Комментарий')
+
+    class Meta:
+        verbose_name = 'Событие'
+        verbose_name_plural = 'События'
+
+
+#
+# class Orders(models.Model):
+#     order_id = models.AutoField(auto_created=True, primary_key=True)
+#     user = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='Юзер', related_name='treatment_course', )
+#     drug = models.ForeignKey(
+#         'Products', on_delete=models.CASCADE, verbose_name='Препарат', related_name='treatment_course',
+#     )
+#     quantity = models.IntegerField('Количество упаковок препарата', blank=True, null=True)
+#     # WAITING_FOR_PAYMENT, IN_DELIVERY, DELIVERED
+#     status = models.CharField(max_length=512)
+#
+
+#
+# class MedicationAvailable(models.Model):
+#     user = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='Юзер', related_name='treatment_course',)
+#     drug = models.ForeignKey(
+#         'Products', on_delete=models.CASCADE, verbose_name='Препарат', related_name='treatment_course',
+#     )
+#     number_of_pills = models.IntegerField('Количество оставшихся таблеток на руках', blank=True, null=True)
+#     # вводится первоначальное значение при создании курса,
+#     # + если совершается покупка
+#     # - если отметил в календаре что принял
+#

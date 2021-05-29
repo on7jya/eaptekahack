@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 
+from celery.schedules import crontab
 from environs import Env
 
 env = Env()
@@ -25,6 +26,14 @@ AUTH_USER_MODEL = 'eaptekahack.User'
 
 # Application definition
 
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [],
+    'COERCE_DECIMAL_TO_STRING': False,
+    'DEFAULT_AUTHENTICATION_CLASSES': [],
+}
+
+
 INSTALLED_APPS = [
     'drf_yasg',
     'django.contrib.admin',
@@ -37,6 +46,9 @@ INSTALLED_APPS = [
     'config',
     'eaptekahack',
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_URLS_REGEX = r'^/api/.*$'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -140,4 +152,7 @@ CELERY_TASK_DEFAULT_QUEUE = 'default'
 CELERY_TIMEZONE = "UTC"
 CELERY_WORKER_POOL_RESTARTS = "True"
 
-CELERY_BEAT_SCHEDULE = {}
+
+CELERY_BEAT_SCHEDULE = {
+    'generate_event': {'task': 'config.tasks.generate_event_for_push', 'schedule': crontab(minute=1),},
+}

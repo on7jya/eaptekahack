@@ -1,6 +1,15 @@
 from django.contrib import admin
 
-from eaptekahack.models import ProductMNN, Products, Property, PropertyMultipleValues, PropertyValues, User
+from eaptekahack.models import (
+    EventForReminder,
+    ProductMNN,
+    Products,
+    Property,
+    PropertyMultipleValues,
+    PropertyValues,
+    TreatmentCourse,
+    User,
+)
 
 
 @admin.register(User)
@@ -85,3 +94,31 @@ class ProductMNNAdmin(admin.ModelAdmin):
     list_display = ('MNN_ID', 'PRODUCT_ID', 'MNN_NAME', 'MNN_CODE')
     ordering = ('MNN_ID',)
     search_fields = ('MNN_ID', 'PRODUCT_ID', 'MNN_NAME', 'MNN_CODE')
+
+
+@admin.register(TreatmentCourse)
+class TreatmentCourseAdmin(admin.ModelAdmin):
+    list_display = (
+        'user',
+        'drug',
+        'schedule_info',
+        'quantity',
+        'quantity_exists',
+        'number_of_events',
+        'is_active',
+        'is_enabled_for_generation',
+    )
+    ordering = ('is_active',)
+    list_filter = ('is_active', 'is_enabled_for_generation')
+    search_fields = ('user', 'drug')
+
+
+@admin.register(EventForReminder)
+class MedicationReminderAdmin(admin.ModelAdmin):
+    list_display = (
+        'course',
+        'planned_datetime',
+    )
+    list_filter = ('planned_datetime',)
+    ordering = ('planned_datetime',)
+    search_fields = ('user', 'drug')

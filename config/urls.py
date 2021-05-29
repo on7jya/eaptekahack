@@ -7,7 +7,7 @@ from rest_framework import permissions
 from rest_framework.routers import DefaultRouter
 
 from config import settings
-from eaptekahack.views import TreatmentCourseViewSet
+from eaptekahack.views import ProductView, TreatmentCourseViewSet
 
 router = DefaultRouter()
 
@@ -15,13 +15,17 @@ router = DefaultRouter()
 
 router.register(r'course', TreatmentCourseViewSet, basename='treatment_course')
 
+api_urlpatterns = router.urls + [
+    path('products/<pk>/', ProductView.as_view(), name='products'),
+]
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include((router.urls, 'eapteka'), namespace='api')),
+    path('api/', include((api_urlpatterns, 'eaptekahack'), namespace='api')),
 ]
 
 # swagger
-openapi_info = openapi.Info(title="eapteka", default_version='v1', description="eapteka")
+openapi_info = openapi.Info(title="eaptekahack", default_version='v1', description="eaptekahack")
 schema_view = get_schema_view(openapi_info, public=True, permission_classes=(permissions.AllowAny,),)
 swagger_patterns = [
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),

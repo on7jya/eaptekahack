@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from eaptekahack.models import TreatmentCourse
+from eaptekahack.models import Products, TreatmentCourse
 
 
 class TreatmentCourseSerializer(serializers.ModelSerializer):
@@ -8,9 +8,11 @@ class TreatmentCourseSerializer(serializers.ModelSerializer):
         model = TreatmentCourse
         fields = ['user', 'drug', 'schedule_info', 'quantity', 'quantity_exists']
 
-    # @transaction.atomic
-    # def update(self, instance: Segment, validated_data):
-    #     super().update(instance, validated_data)
-    #     categories_ids = self.initial_data.get('categories')
-    #     SegmentController.update_segment(instance, categories_ids)
-    #     return instance
+
+class ProductSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(source='ID', read_only=True)
+    name = serializers.CharField(source='NAME', read_only=True)
+
+    class Meta:
+        model = Products
+        fields = ['id', 'name']
