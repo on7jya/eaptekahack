@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from eaptekahack.models import (
-    MedicationReminder,
+    EventForReminder,
     ProductMNN,
     Products,
     Property,
@@ -113,7 +113,7 @@ class TreatmentCourseAdmin(admin.ModelAdmin):
     search_fields = ('user', 'drug')
 
 
-@admin.register(MedicationReminder)
+@admin.register(EventForReminder)
 class MedicationReminderAdmin(admin.ModelAdmin):
     list_display = (
         'course',

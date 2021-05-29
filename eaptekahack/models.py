@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+from eaptekahack.constants import EventChoices
+
 
 class Products(models.Model):
     ID = models.IntegerField()
@@ -115,36 +117,37 @@ class TreatmentCourse(models.Model):
         verbose_name_plural = 'Курс приема'
 
 
-class MedicationReminder(models.Model):
+class EventForReminder(models.Model):
     """
+    События
     """
 
     course = models.ForeignKey(
         'TreatmentCourse', on_delete=models.CASCADE, verbose_name='Курс', related_name='reminder',
     )
     planned_datetime = models.DateTimeField('Дата и время события')
-
-
-class CourseProgress(models.Model):
-    user = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='Юзер', related_name='treatment_course',)
-    drug = models.ForeignKey(
-        'Products', on_delete=models.CASCADE, verbose_name='Препарат', related_name='treatment_course',
+    event_code = models.CharField(
+        'Инициализирующее событие', max_length=50, choices=EventChoices.choices, db_index=True
     )
-    # тут хранится каждая дата приема из прошлого
-    date = models.DateTimeField('Дата и время приема события')
-    has_taken = models.BooleanField('Принял ли таблетку?', default=False)
+    is_success = models.BooleanField('Событие успешно?', default=False)
+    comment = models.TextField('Комментарий')
+
+    class Meta:
+        verbose_name = 'Событие'
+        verbose_name_plural = 'События'
 
 
-class Orders(models.Model):
-    order_id = models.AutoField(auto_created=True, primary_key=True)
-    user = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='Юзер', related_name='treatment_course', )
-    drug = models.ForeignKey(
-        'Products', on_delete=models.CASCADE, verbose_name='Препарат', related_name='treatment_course',
-    )
-    quantity = models.IntegerField('Количество упаковок препарата', blank=True, null=True)
-    # WAITING_FOR_PAYMENT, IN_DELIVERY, DELIVERED
-    status = models.CharField(max_length=512)
-
+#
+# class Orders(models.Model):
+#     order_id = models.AutoField(auto_created=True, primary_key=True)
+#     user = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='Юзер', related_name='treatment_course', )
+#     drug = models.ForeignKey(
+#         'Products', on_delete=models.CASCADE, verbose_name='Препарат', related_name='treatment_course',
+#     )
+#     quantity = models.IntegerField('Количество упаковок препарата', blank=True, null=True)
+#     # WAITING_FOR_PAYMENT, IN_DELIVERY, DELIVERED
+#     status = models.CharField(max_length=512)
+#
 
 #
 # class MedicationAvailable(models.Model):
@@ -157,12 +160,3 @@ class Orders(models.Model):
 #     # + если совершается покупка
 #     # - если отметил в календаре что принял
 #
-#
-# class CourseProgress(models.Model):
-#     user = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='Юзер', related_name='treatment_course',)
-#     drug = models.ForeignKey(
-#         'Products', on_delete=models.CASCADE, verbose_name='Препарат', related_name='treatment_course',
-#     )
-#     # тут хранится каждая дата приема из прошлого
-#     date = models.DateTimeField('Дата и время приема события')
-#     has_taken = models.BooleanField('Принял ли таблетку?', default=False)

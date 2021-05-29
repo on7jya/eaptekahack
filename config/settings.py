@@ -26,6 +26,14 @@ AUTH_USER_MODEL = 'eaptekahack.User'
 
 # Application definition
 
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [],
+    'COERCE_DECIMAL_TO_STRING': False,
+    'DEFAULT_AUTHENTICATION_CLASSES': [],
+}
+
+
 INSTALLED_APPS = [
     'drf_yasg',
     'django.contrib.admin',
@@ -38,6 +46,9 @@ INSTALLED_APPS = [
     'config',
     'eaptekahack',
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_URLS_REGEX = r'^/api/.*$'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -111,8 +122,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-
-REST_FRAMEWORK = {}
 
 # STATIC
 STATIC_URL = '/static/'
