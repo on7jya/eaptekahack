@@ -123,3 +123,24 @@ class MedicationReminder(models.Model):
         'TreatmentCourse', on_delete=models.CASCADE, verbose_name='Курс', related_name='reminder',
     )
     planned_datetime = models.DateTimeField('Дата и время события')
+
+
+class MedicationAvailable(models.Model):
+    user = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='Юзер', related_name='treatment_course',)
+    drug = models.ForeignKey(
+        'Products', on_delete=models.CASCADE, verbose_name='Препарат', related_name='treatment_course',
+    )
+    number_of_pills = models.IntegerField('Количество оставшихся таблеток на руках', blank=True, null=True)
+    # вводится первоначальное значение при создании курса,
+    # + если совершается покупка
+    # - если отметил в календаре что принял
+
+
+class CourseProgress(models.Model):
+    user = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='Юзер', related_name='treatment_course',)
+    drug = models.ForeignKey(
+        'Products', on_delete=models.CASCADE, verbose_name='Препарат', related_name='treatment_course',
+    )
+    # тут хранится каждая дата приема из прошлого
+    date = models.DateTimeField('Дата и время приема события')
+    has_taken = models.BooleanField('Принял ли таблетку?', default=False)
