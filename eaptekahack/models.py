@@ -87,6 +87,19 @@ class User(AbstractUser):
 
 
 class TreatmentCourse(models.Model):
+    """
+    schedule_info:
+        {
+                "start_date": "DD.MM.YYYY", (default: текущая дата),
+                "time": ["08:00","12:00","20:00",],
+                "repeat_limit": {. — Предел генерации
+                    "without_date": "boolean",  — Генерировать постоянно
+                    "date": "DD.MM.YYYY",  — Генерировать до определенной даты
+                    "count": "number. — Генерировать определенное количество раз
+                }
+         }
+    """
+
     user = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='Юзер', related_name='treatment_course',)
     drug = models.ForeignKey(
         'Products', on_delete=models.CASCADE, verbose_name='Препарат', related_name='treatment_course',
@@ -94,7 +107,18 @@ class TreatmentCourse(models.Model):
     schedule_info = models.JSONField('График приема лекарств', default=dict)
     quantity = models.DecimalField('Количество единиц для приема', max_digits=9, decimal_places=3)
     quantity_exists = models.DecimalField('Количество единиц в наличии', max_digits=9, decimal_places=3)
+    number_of_events = models.IntegerField('Количество событий приема', blank=True, null=True)
+    is_active = models.BooleanField('Активный курс?', default=True)
+    is_enabled_for_generation = models.BooleanField('Генерировать события?', default=True)
 
     class Meta:
         verbose_name = 'Курс приема'
         verbose_name_plural = 'Курс приема'
+
+
+class MedicationReminder(models.Model):
+    """
+    """
+
+    user = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='Юзер', related_name='reminder',)
+    planned_datetime = models.DateTimeField('Дата и время события')

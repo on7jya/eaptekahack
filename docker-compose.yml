@@ -75,11 +75,10 @@ services:
   app_migration:
     container_name: ${COMPOSE_PROJECT_NAME}_app_migration
     <<: *eaptekahack_app_v1
-    command: bash -c "python manage.py migrate"
+    command: bash -c "python manage.py migrate && python manage.py upload_data"
     restart: on-failure
     depends_on:
       - postgres
-
 
 
   celery_worker:
@@ -97,7 +96,7 @@ services:
   celery_beat:
     container_name: ${COMPOSE_PROJECT_NAME}_celery_beat
     <<: *eaptekahack_app_v1
-    command: celery beat -A config:celery_app -l info -s /var/run/celerybeat-schedule --pidfile=/var/run/celerybeat.pid
+    command: celery beat -A config:celery_app -l info
     depends_on:
       - celery_worker
 
