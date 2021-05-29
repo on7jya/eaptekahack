@@ -151,5 +151,5 @@ CELERY_WORKER_POOL_RESTARTS = "True"
 
 
 CELERY_BEAT_SCHEDULE = {
-    'generate_event': {'task': 'config.tasks.generate_event_for_push', 'schedule': crontab(minute=1),},
+    'generate_event': {'task': 'config.tasks.generate_event_for_taking_medical_drugs', 'schedule': crontab(minute=1),},
 }

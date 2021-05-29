@@ -130,7 +130,7 @@ class EventForReminder(models.Model):
         'Инициализирующее событие', max_length=50, choices=EventChoices.choices, db_index=True
     )
     is_success = models.BooleanField('Событие успешно?', default=False)
-    comment = models.TextField('Комментарий')
+    comment = models.TextField('Комментарий', blank=True, null=True)
 
     class Meta:
         verbose_name = 'Событие'

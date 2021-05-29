@@ -1,6 +1,7 @@
 from django.utils import timezone
 from rest_framework.exceptions import ValidationError
 
+from eaptekahack.constants import EventChoices
 from eaptekahack.models import EventForReminder, TreatmentCourse
 
 
@@ -45,7 +46,7 @@ class PlannedEventCreator:
             self.course.number_of_events += 1
             planned_date += delta
 
-    def create_tasks(self):
+    def create_events(self):
         self._get_planned_dates()
 
         events_to_create = []
@@ -53,7 +54,13 @@ class PlannedEventCreator:
         for date in self.planned_dates:
             for time in self.periodical_time:
                 planned_datetime = timezone.datetime(date.year, date.month, date.day, time.hour, time.minute,)
-                events_to_create.append(EventForReminder(planned_datetime=planned_datetime, course=self.course))
+                events_to_create.append(
+                    EventForReminder(
+                        planned_datetime=planned_datetime,
+                        course=self.course,
+                        event_code=EventChoices.TAKING_MEDICAL_DRUGS,
+                    )
+                )
 
         if events_to_create:
             EventForReminder.objects.bulk_create(events_to_create)

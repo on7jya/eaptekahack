@@ -4,9 +4,9 @@ from eaptekahack.models import TreatmentCourse
 
 
 @celery_app.task(ignore_result=True)
-def generate_event_for_push():
+def generate_event_for_taking_medical_drugs():
     courses = TreatmentCourse.objects.filter(is_enabled_for_generation=True)
 
     for course in courses:
         event_creator = PlannedEventCreator(course)
-        event_creator.create_tasks()
+        event_creator.create_events()
