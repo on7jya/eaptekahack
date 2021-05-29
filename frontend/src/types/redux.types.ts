@@ -1,5 +1,9 @@
 export enum ActionTypes {
-    TEST = 'TEST',
+    REQUEST_DRUGS = '',
+    SEND_COURSE = 'SEND_COURSE',
+    REQUEST_COURSES = 'REQUEST_COURSES',
+    REQUEST_SUBSCRIBE = 'REQUEST_SUBSCRIBE'
+
 
 }
 export interface AnyAction {
