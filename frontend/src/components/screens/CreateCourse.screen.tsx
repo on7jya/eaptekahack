@@ -2,7 +2,6 @@ import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import Course from '../Course';
 import Search from '../Search.pages';
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,

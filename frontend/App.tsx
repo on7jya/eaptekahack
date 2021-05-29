@@ -10,6 +10,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import CreateCourseScreen from './src/components/screens/CreateCourse.screen';
 import MyCourses from './src/components/screens/MyCourses.screen';
+import { ThemeProvider } from 'react-native-elements';
 
 
 
@@ -19,13 +20,15 @@ const Stack = createStackNavigator();
 export default function App() {
   return (
     <ReduxProvider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen name="Home" component={CreateCourseScreen} />
-          <Stack.Screen name="MyCourses" component={MyCourses} />
-          <Stack.Screen name="Search" component={Search} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <ThemeProvider>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="Home">
+            <Stack.Screen name="Home" component={CreateCourseScreen} />
+            <Stack.Screen name="MyCourses" component={MyCourses} />
+            <Stack.Screen name="Search" component={Search} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </ThemeProvider>
     </ReduxProvider>
   );
 }
