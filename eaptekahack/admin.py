@@ -1,6 +1,11 @@
 from django.contrib import admin
 
-from eaptekahack.models import ProductMNN, Products, Property, PropertyMultipleValues, PropertyValues
+from eaptekahack.models import ProductMNN, Products, Property, PropertyMultipleValues, PropertyValues, User
+
+
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
+    pass
 
 
 @admin.register(Products)

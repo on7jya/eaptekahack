@@ -1,3 +1,4 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
@@ -75,3 +76,25 @@ class ProductMNN(models.Model):
         verbose_name = 'Международное непатентованное наименование'
         verbose_name_plural = 'ProductMNN'
         unique_together = ('MNN_ID', 'PRODUCT_ID')
+
+
+class User(AbstractUser):
+    phone_number = models.CharField(verbose_name='Номер телефона', max_length=16, blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
+
+
+class TreatmentCourse(models.Model):
+    user = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='Юзер', related_name='treatment_course',)
+    drug = models.ForeignKey(
+        'Products', on_delete=models.CASCADE, verbose_name='Препарат', related_name='treatment_course',
+    )
+    schedule_info = models.JSONField('График приема лекарств', default=dict)
+    quantity = models.DecimalField('Количество единиц для приема', max_digits=9, decimal_places=3)
+    quantity_exists = models.DecimalField('Количество единиц в наличии', max_digits=9, decimal_places=3)
+
+    class Meta:
+        verbose_name = 'Курс приема'
+        verbose_name_plural = 'Курс приема'

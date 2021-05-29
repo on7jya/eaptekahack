@@ -1,14 +1,23 @@
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path, re_path
+from django.urls import include, path, re_path
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
+from rest_framework.routers import DefaultRouter
 
 from config import settings
+from eaptekahack.views import TreatmentCourseViewSet
+
+router = DefaultRouter()
+
+# registering Android routes
+
+router.register(r'course', TreatmentCourseViewSet, basename='treatment_course')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/', include((router.urls, 'eapteka'), namespace='api')),
 ]
 
 # swagger

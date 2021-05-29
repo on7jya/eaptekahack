@@ -20,6 +20,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+
+AUTH_USER_MODEL = 'eaptekahack.User'
+
 # Application definition
 
 INSTALLED_APPS = [
