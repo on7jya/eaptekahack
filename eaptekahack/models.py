@@ -5,19 +5,19 @@ from eaptekahack.constants import EventChoices
 
 
 class Products(models.Model):
-    ID = models.IntegerField()
-    NAME = models.CharField(max_length=512)
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=512)
+    img_url = models.URLField(blank=True, null=True)
 
     class Meta:
         verbose_name = 'Препарат'
         verbose_name_plural = 'Products'
-        unique_together = ('ID', 'NAME')
 
 
 class Property(models.Model):
-    ID = models.IntegerField(primary_key=True)
-    CODE = models.CharField(max_length=512)
-    NAME = models.CharField(max_length=512)
+    id = models.IntegerField(primary_key=True)
+    code = models.CharField(max_length=512)
+    name = models.CharField(max_length=512)
 
     class Meta:
         verbose_name = 'Параметр'
@@ -25,43 +25,43 @@ class Property(models.Model):
 
 
 class PropertyMultipleValues(models.Model):
-    IBLOCK_ELEMENT_ID = models.IntegerField()
-    IBLOCK_PROPERTY_ID = models.CharField(max_length=512)
-    VALUE = models.CharField(max_length=512, null=True, blank=True)
-    VALUE_ENUM = models.CharField(max_length=512, null=True, blank=True)
-    VALUE_NUM = models.FloatField(null=True, blank=True)
-    DESCRIPTION = models.CharField(max_length=512, null=True, blank=True)
+    iblock_element_id = models.IntegerField()
+    iblock_property_id = models.CharField(max_length=512)
+    value = models.CharField(max_length=512, null=True, blank=True)
+    value_enum = models.CharField(max_length=512, null=True, blank=True)
+    value_num = models.FloatField(null=True, blank=True)
+    description = models.CharField(max_length=512, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Параметр с несколькими значениями'
         verbose_name_plural = 'PropertyMultipleValues'
-        unique_together = ('IBLOCK_ELEMENT_ID', 'IBLOCK_PROPERTY_ID', 'VALUE')
+        unique_together = ('iblock_element_id', 'iblock_property_id', 'value')
 
 
 class PropertyValues(models.Model):
-    IBLOCK_ELEMENT_ID = models.IntegerField(unique=True)
-    PROPERTY_276 = models.CharField(max_length=512, blank=True, null=True)
-    PROPERTY_429 = models.CharField(max_length=512, blank=True, null=True)
-    PROPERTY_326 = models.CharField(max_length=512, blank=True, null=True)
-    PROPERTY_574 = models.CharField(max_length=512, blank=True, null=True)
-    PROPERTY_265 = models.CharField(max_length=512, blank=True, null=True)
-    PROPERTY_284 = models.CharField(max_length=512, blank=True, null=True)
-    PROPERTY_541 = models.CharField(max_length=512, blank=True, null=True)
-    PROPERTY_542 = models.CharField(max_length=512, blank=True, null=True)
-    PROPERTY_343 = models.CharField(max_length=512, blank=True, null=True)
-    PROPERTY_428 = models.CharField(max_length=512, blank=True, null=True)
-    PROPERTY_274 = models.CharField(max_length=512, blank=True, null=True)
-    PROPERTY_263 = models.FloatField(blank=True, null=True)
-    PROPERTY_264 = models.CharField(max_length=512, blank=True, null=True)
-    PROPERTY_594 = models.CharField(max_length=512, blank=True, null=True)
-    PROPERTY_344 = models.CharField(max_length=512, blank=True, null=True)
-    PROPERTY_483 = models.FloatField(max_length=512, blank=True, null=True)
-    PROPERTY_536 = models.CharField(max_length=512, blank=True, null=True)
-    PROPERTY_540 = models.CharField(max_length=512, blank=True, null=True)
-    PROPERTY_356 = models.CharField(max_length=512, blank=True, null=True)
-    PROPERTY_567 = models.CharField(max_length=512, blank=True, null=True)
-    PROPERTY_332 = models.CharField(max_length=512, blank=True, null=True)
-    PROPERTY_283 = models.CharField(max_length=512, blank=True, null=True)
+    iblock_element_id = models.IntegerField(unique=True)
+    property_276 = models.CharField(max_length=512, blank=True, null=True)
+    property_429 = models.CharField(max_length=512, blank=True, null=True)
+    property_326 = models.CharField(max_length=512, blank=True, null=True)
+    property_574 = models.CharField(max_length=512, blank=True, null=True)
+    property_265 = models.CharField(max_length=512, blank=True, null=True)
+    property_284 = models.CharField(max_length=512, blank=True, null=True)
+    property_541 = models.CharField(max_length=512, blank=True, null=True)
+    property_542 = models.CharField(max_length=512, blank=True, null=True)
+    property_343 = models.CharField(max_length=512, blank=True, null=True)
+    property_428 = models.CharField(max_length=512, blank=True, null=True)
+    property_274 = models.CharField(max_length=512, blank=True, null=True)
+    property_263 = models.FloatField(blank=True, null=True)
+    property_264 = models.CharField(max_length=512, blank=True, null=True)
+    property_594 = models.CharField(max_length=512, blank=True, null=True)
+    property_344 = models.CharField(max_length=512, blank=True, null=True)
+    property_483 = models.FloatField(max_length=512, blank=True, null=True)
+    property_536 = models.CharField(max_length=512, blank=True, null=True)
+    property_540 = models.CharField(max_length=512, blank=True, null=True)
+    property_356 = models.CharField(max_length=512, blank=True, null=True)
+    property_567 = models.CharField(max_length=512, blank=True, null=True)
+    property_332 = models.CharField(max_length=512, blank=True, null=True)
+    property_283 = models.CharField(max_length=512, blank=True, null=True)
 
     class Meta:
         verbose_name = 'Значения параметра'
@@ -69,15 +69,15 @@ class PropertyValues(models.Model):
 
 
 class ProductMNN(models.Model):
-    MNN_ID = models.CharField(max_length=512)
-    PRODUCT_ID = models.IntegerField(blank=True, null=True)
-    MNN_NAME = models.CharField('Наименование', max_length=512, blank=True, null=True)
-    MNN_CODE = models.CharField('Код', max_length=512, blank=True, null=True)
+    mnn_id = models.CharField(max_length=512)
+    product_id = models.IntegerField(blank=True, null=True)
+    mnn_name = models.CharField('Наименование', max_length=512, blank=True, null=True)
+    mnn_code = models.CharField('Код', max_length=512, blank=True, null=True)
 
     class Meta:
         verbose_name = 'Международное непатентованное наименование'
         verbose_name_plural = 'ProductMNN'
-        unique_together = ('MNN_ID', 'PRODUCT_ID')
+        unique_together = ('mnn_id', 'product_id')
 
 
 class User(AbstractUser):
@@ -137,26 +137,18 @@ class EventForReminder(models.Model):
         verbose_name_plural = 'События'
 
 
-#
-# class Orders(models.Model):
-#     order_id = models.AutoField(auto_created=True, primary_key=True)
-#     user = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='Юзер', related_name='treatment_course', )
-#     drug = models.ForeignKey(
-#         'Products', on_delete=models.CASCADE, verbose_name='Препарат', related_name='treatment_course',
-#     )
-#     quantity = models.IntegerField('Количество упаковок препарата', blank=True, null=True)
-#     # WAITING_FOR_PAYMENT, IN_DELIVERY, DELIVERED
-#     status = models.CharField(max_length=512)
-#
+class MedicationAvailable(models.Model):
+    """
+     вводится первоначальное значение при создании курса,
+        + если совершается покупка
+        - если отметил в календаре что принял
+    """
 
-#
-# class MedicationAvailable(models.Model):
-#     user = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='Юзер', related_name='treatment_course',)
-#     drug = models.ForeignKey(
-#         'Products', on_delete=models.CASCADE, verbose_name='Препарат', related_name='treatment_course',
-#     )
-#     number_of_pills = models.IntegerField('Количество оставшихся таблеток на руках', blank=True, null=True)
-#     # вводится первоначальное значение при создании курса,
-#     # + если совершается покупка
-#     # - если отметил в календаре что принял
-#
+    course = models.ForeignKey(
+        'TreatmentCourse', on_delete=models.CASCADE, verbose_name='Курс', related_name='medication_available',
+    )
+    number_of_pills = models.IntegerField('Количество оставшихся таблеток на руках', blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'Остаток лекарства'
+        verbose_name_plural = 'Остаток лекарства'

@@ -3,8 +3,8 @@ from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveMode
 from rest_framework.viewsets import GenericViewSet
 
 from config.settings import DEBUG
-from eaptekahack.models import Products, TreatmentCourse
-from eaptekahack.serializers.treatment_course import ProductSerializer, TreatmentCourseSerializer
+from eaptekahack.models import MedicationAvailable, Products, TreatmentCourse
+from eaptekahack.serializers import MedicationAvailableSerializer, ProductSerializer, TreatmentCourseSerializer
 
 
 class TreatmentCourseViewSet(GenericViewSet, ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin):
@@ -60,3 +60,18 @@ class ProductView(RetrieveAPIView):
 
     def get_queryset(self):
         return Products.objects.all()
+
+
+class MedicationAvailableView(RetrieveAPIView):
+    serializer_class = MedicationAvailableSerializer
+
+    def get_queryset(self):
+        return MedicationAvailable.objects.filter(course=self.kwargs['pk'])
+
+
+class AnalogProductView(RetrieveAPIView):
+    serializer_class = ProductSerializer
+    queryset = Products.objects.all()
+
+    def get_queryset(self):
+        return Products.objects.filter(pk=self.kwargs['pk'])

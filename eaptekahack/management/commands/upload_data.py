@@ -17,13 +17,21 @@ class Command(BaseCommand):
     def upload_products(self):
         with open('initial_data/products.json', newline='', encoding='utf-8-sig') as file:
             json_data = json.load(file)
-            Products.objects.bulk_create([Products(**obj) for obj in json_data], batch_size=1000, ignore_conflicts=True)
+
+            Products.objects.bulk_create(
+                [Products(id=obj['ID'], name=obj['NAME']) for obj in json_data], batch_size=1000, ignore_conflicts=True
+            )
         self.stdout.write(self.style.SUCCESS('''Created product successfully!'''))
 
     def upload_property(self, *args, **options):
         with open('initial_data/property.json', newline='', encoding='utf-8-sig') as file:
             json_data = json.load(file)
-            Property.objects.bulk_create([Property(**obj) for obj in json_data], batch_size=1000, ignore_conflicts=True)
+
+            Property.objects.bulk_create(
+                [Property(id=obj['ID'], name=obj['NAME'], code=obj['CODE']) for obj in json_data],
+                batch_size=1000,
+                ignore_conflicts=True,
+            )
         self.stdout.write(self.style.SUCCESS('''Created property successfully!'''))
 
     def upload_property_multiple_values(self, *args, **options):
@@ -31,9 +39,21 @@ class Command(BaseCommand):
             json_data = json.load(file)
 
             PropertyMultipleValues.objects.bulk_create(
-                [PropertyMultipleValues(**obj) for obj in json_data], batch_size=1000, ignore_conflicts=True
+                [
+                    PropertyMultipleValues(
+                        iblock_element_id=obj['IBLOCK_ELEMENT_ID'],
+                        iblock_property_id=obj['IBLOCK_PROPERTY_ID'],
+                        value=obj['VALUE'],
+                        value_enum=obj['VALUE_ENUM'],
+                        value_num=obj['VALUE_NUM'],
+                        description=obj['DESCRIPTION'],
+                    )
+                    for obj in json_data
+                ],
+                batch_size=1000,
+                ignore_conflicts=True,
             )
-            remove_duplicated_records(PropertyMultipleValues, ['IBLOCK_ELEMENT_ID', 'IBLOCK_PROPERTY_ID', 'VALUE'])
+            remove_duplicated_records(PropertyMultipleValues, ['iblock_element_id', 'iblock_property_id', 'value'])
         self.stdout.write(self.style.SUCCESS('Created propertyMultipleValues successfully!'))
 
     def upload_property_values(self, *args, **options):
@@ -41,7 +61,34 @@ class Command(BaseCommand):
             json_data = json.load(file)
 
             PropertyValues.objects.bulk_create(
-                [PropertyValues(**obj) for obj in json_data], batch_size=1000, ignore_conflicts=True
+                [
+                    PropertyValues(
+                        iblock_element_id=obj['IBLOCK_ELEMENT_ID'],
+                        property_276=obj['PROPERTY_276'],
+                        property_429=obj['PROPERTY_429'],
+                        property_326=obj['PROPERTY_326'],
+                        property_574=obj['PROPERTY_574'],
+                        property_265=obj['PROPERTY_265'],
+                        property_284=obj['PROPERTY_284'],
+                        property_541=obj['PROPERTY_541'],
+                        property_542=obj['PROPERTY_542'],
+                        property_343=obj['PROPERTY_343'],
+                        property_428=obj['PROPERTY_428'],
+                        property_264=obj['PROPERTY_264'],
+                        property_594=obj['PROPERTY_594'],
+                        property_344=obj['PROPERTY_344'],
+                        property_483=obj['PROPERTY_483'],
+                        property_536=obj['PROPERTY_536'],
+                        property_540=obj['PROPERTY_540'],
+                        property_356=obj['PROPERTY_356'],
+                        property_567=obj['PROPERTY_567'],
+                        property_332=obj['PROPERTY_332'],
+                        property_283=obj['PROPERTY_283'],
+                    )
+                    for obj in json_data
+                ],
+                batch_size=1000,
+                ignore_conflicts=True,
             )
         self.stdout.write(self.style.SUCCESS('Created propertyValues successfully!'))
 
@@ -50,7 +97,17 @@ class Command(BaseCommand):
             json_data = json.load(file)
 
             ProductMNN.objects.bulk_create(
-                [ProductMNN(**obj) for obj in json_data], batch_size=1000, ignore_conflicts=True
+                [
+                    ProductMNN(
+                        mnn_id=obj['MNN_ID'],
+                        product_id=obj['PRODUCT_ID'],
+                        mnn_name=obj['MNN_NAME'],
+                        mnn_code=obj['MNN_CODE'],
+                    )
+                    for obj in json_data
+                ],
+                batch_size=1000,
+                ignore_conflicts=True,
             )
             self.stdout.write(self.style.SUCCESS('Created productToMNN successfully!'))
 

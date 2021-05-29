@@ -23,7 +23,7 @@ def user():
 
 @pytest.fixture()
 def product():
-    return Products.objects.create(ID=461364, NAME="Виагра, таблетки 50 мг, 2 шт.")
+    return Products.objects.create(id=461364, name="Виагра, таблетки 50 мг, 2 шт.")
 
 
 @pytest.fixture()

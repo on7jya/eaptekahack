@@ -7,16 +7,16 @@ from rest_framework import permissions
 from rest_framework.routers import DefaultRouter
 
 from config import settings
-from eaptekahack.views import ProductView, TreatmentCourseViewSet
+from eaptekahack.views import AnalogProductView, MedicationAvailableView, ProductView, TreatmentCourseViewSet
 
 router = DefaultRouter()
-
-# registering Android routes
 
 router.register(r'course', TreatmentCourseViewSet, basename='treatment_course')
 
 api_urlpatterns = router.urls + [
     path('products/<pk>/', ProductView.as_view(), name='products'),
+    path('search_analog/<pk>/', AnalogProductView.as_view(), name='analog_products'),
+    path('medication_available/<pk>/', MedicationAvailableView.as_view(), name='medication_available'),
 ]
 
 urlpatterns = [

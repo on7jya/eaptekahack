@@ -1,12 +1,12 @@
 from rest_framework import serializers
 
-from eaptekahack.models import Products, TreatmentCourse
+from eaptekahack.models import MedicationAvailable, Products, TreatmentCourse
 
 
 class TreatmentCourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = TreatmentCourse
-        fields = ['user', 'drug', 'schedule_info', 'quantity', 'quantity_exists']
+        fields = '__all__'
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -16,3 +16,9 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Products
         fields = ['id', 'name']
+
+
+class MedicationAvailableSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MedicationAvailable
+        fields = '__all__'
