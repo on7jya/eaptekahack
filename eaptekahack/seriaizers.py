@@ -10,12 +10,9 @@ class TreatmentCourseSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(source='ID', read_only=True)
-    name = serializers.CharField(source='NAME', read_only=True)
-
     class Meta:
         model = Products
-        fields = ['id', 'name']
+        fields = '__all__'
 
 
 class MedicationAvailableSerializer(serializers.ModelSerializer):

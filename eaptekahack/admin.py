@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from eaptekahack.models import (
     EventForReminder,
+    MedicationAvailable,
     ProductMNN,
     Products,
     Property,
@@ -19,3 +20,4 @@ admin.site.register(PropertyValues)
 admin.site.register(ProductMNN)
 admin.site.register(TreatmentCourse)
 admin.site.register(EventForReminder)
+admin.site.register(MedicationAvailable)

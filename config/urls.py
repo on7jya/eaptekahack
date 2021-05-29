@@ -15,7 +15,7 @@ router.register(r'course', TreatmentCourseViewSet, basename='treatment_course')
 
 api_urlpatterns = router.urls + [
     path('products/<pk>/', ProductView.as_view(), name='products'),
-    path('search_analog/<pk>/', AnalogProductView.as_view(), name='analog_products'),
+    path('search_analog/<pk>/', AnalogProductView.as_view(), name='search_analog'),
     path('medication_available/<pk>/', MedicationAvailableView.as_view(), name='medication_available'),
 ]
 
