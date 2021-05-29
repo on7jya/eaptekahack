@@ -93,7 +93,6 @@ class TreatmentCourse(models.Model):
                 "start_date": "DD.MM.YYYY", (default: текущая дата),
                 "time": ["08:00","12:00","20:00",],
                 "repeat_limit": {. — Предел генерации
-                    "without_date": "boolean",  — Генерировать постоянно
                     "date": "DD.MM.YYYY",  — Генерировать до определенной даты
                     "count": "number. — Генерировать определенное количество раз
                 }
@@ -120,5 +119,7 @@ class MedicationReminder(models.Model):
     """
     """
 
-    user = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='Юзер', related_name='reminder',)
+    course = models.ForeignKey(
+        'TreatmentCourse', on_delete=models.CASCADE, verbose_name='Курс', related_name='reminder',
+    )
     planned_datetime = models.DateTimeField('Дата и время события')

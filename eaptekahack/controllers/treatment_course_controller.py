@@ -10,7 +10,6 @@ class PlannedEventCreator:
     #         "start_date": "DD.MM.YYYY", (default: текущая дата),
     #         "time": ["08:00","12:00","20:00",],
     #         "repeat_limit": {. — Предел генерации
-    #             "without_date": "boolean",  — Генерировать постоянно
     #             "date": "DD.MM.YYYY",  — Генерировать до определенной даты
     #             "count": "number. — Генерировать определенное количество раз
     #         }
@@ -27,8 +26,6 @@ class PlannedEventCreator:
             self.repeat_limit_date = repeat_limit_date
         elif repeat_limit_count := self.schedule_info['repeat_limit'].get('count'):
             self.repeat_limit_count = repeat_limit_count
-        elif without_date := self.schedule_info['repeat_limit'].get('without_date'):
-            self.without_date = without_date
         else:
             raise ValidationError('Требуется заполнить периодичность приема!')
         self.planned_dates = []
@@ -56,7 +53,7 @@ class PlannedEventCreator:
         for date in self.planned_dates:
             for time in self.periodical_time:
                 planned_datetime = timezone.datetime(date.year, date.month, date.day, time.hour, time.minute,)
-                events_to_create.append(MedicationReminder(planned_datetime=planned_datetime, user=self.user))
+                events_to_create.append(MedicationReminder(planned_datetime=planned_datetime, course=self.course))
 
         if events_to_create:
             MedicationReminder.objects.bulk_create(events_to_create)
