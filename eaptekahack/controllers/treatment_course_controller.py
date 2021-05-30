@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.utils import timezone
 from rest_framework.exceptions import ValidationError
 
@@ -46,7 +48,7 @@ class PlannedEventCreator:
             self.course.number_of_events += 1
             planned_date += delta
 
-    def create_events(self):
+    def create_events_taking_medical_drugs(self):
         self._get_planned_dates()
 
         events_to_create = []
@@ -66,3 +68,17 @@ class PlannedEventCreator:
             EventForReminder.objects.bulk_create(events_to_create)
 
         self.course.save()
+
+    def create_events_drug_is_running_out(self):
+        EventForReminder.objects.create(
+            planned_datetime=timezone.now() + timedelta(minutes=15),
+            course=self.course,
+            event_code=EventChoices.DRUG_IS_RUNNING_OUT,
+        )
+
+    def create_events_make_order(self):
+        EventForReminder.objects.create(
+            planned_datetime=timezone.now() + timedelta(minutes=5),
+            course=self.course,
+            event_code=EventChoices.MAKE_ORDER,
+        )

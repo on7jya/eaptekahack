@@ -6,3 +6,6 @@ class EventChoices(TextChoices):
     EXPIRATION_DATE = 'expiration_date', 'Окончание срока годности'
     DRUG_IS_RUNNING_OUT = 'drug_is_running_out', 'Окончание запаса лекарств'
     MAKE_ORDER = 'make_order', 'Сделать до-заказ'
+
+
+DRUG_IS_LOW_QUANTITY_CHOICES = [EventChoices.DRUG_IS_RUNNING_OUT, EventChoices.MAKE_ORDER]

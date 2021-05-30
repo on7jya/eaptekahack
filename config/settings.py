@@ -21,7 +21,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-
 AUTH_USER_MODEL = 'eaptekahack.User'
 
 # Application definition
@@ -32,7 +31,6 @@ REST_FRAMEWORK = {
     'COERCE_DECIMAL_TO_STRING': False,
     'DEFAULT_AUTHENTICATION_CLASSES': [],
 }
-
 
 INSTALLED_APPS = [
     'drf_yasg',
@@ -149,7 +147,21 @@ CELERY_TASK_DEFAULT_QUEUE = 'default'
 CELERY_TIMEZONE = "UTC"
 CELERY_WORKER_POOL_RESTARTS = "True"
 
-
 CELERY_BEAT_SCHEDULE = {
-    'generate_event': {'task': 'config.tasks.generate_event_for_taking_medical_drugs', 'schedule': crontab(minute=1),},
+    'generate_event_for_taking_medical_drugs': {
+        'task': 'config.tasks.generate_event_for_taking_medical_drugs',
+        'schedule': crontab(minute=1),
+    },
+    'generate_event_for_drug_is_running_out': {
+        'task': 'config.tasks.generate_event_for_drug_is_running_out',
+        'schedule': crontab(minute=1),
+    },
+    'send_push_reminder_taking_medical_drugs': {
+        'task': 'config.tasks.send_push_reminder_taking_medical_drugs',
+        'schedule': crontab(minute=1),
+    },
+    'send_push_reminder_for_drug_is_running_out': {
+        'task': 'config.tasks.send_push_reminder_for_drug_is_running_out',
+        'schedule': crontab(minute=1),
+    },
 }

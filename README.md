@@ -1,6 +1,6 @@
 # Бекенд для eaptekahack
 
-Органайзер приема лекарств как часть приложения Сбер Еаптека, который предоставляет возможность пользователю контролировать прием лекарств/товаров (напоминания, информация об остатке) и покупать их по подписке
+Органайзер приема лекарств как часть приложения Сбер Еаптека, который предоставляет возможность пользователю контролировать прием лекарств/товаров (напоминания, информация об остатке)
 
 
 ![](https://img.shields.io/badge/python-black)
@@ -31,17 +31,19 @@
 4. Собрать docker-образы и запустить все
 - `make build`
 - `make start`
+  
+  or `make restart` для быстрого рестарта всех контейнеров
 
 5. PostgreSQL в докере
 - создать роль и БД
 ```  
 sudo -u postgres psql
 
-create user eapteka with password '1234';
-alter role eapteka set client_encoding to 'utf8';
-alter role eapteka set default_transaction_isolation to 'read committed';
-alter role eapteka set timezone to 'UTC';
-create database eapteka_db owner eapteka;
+create user $DB_USER with password $DB_PASS;
+alter role $DB_USER set client_encoding to 'utf8';
+alter role $DB_USER set default_transaction_isolation to 'read committed';
+alter role $DB_USER set timezone to 'UTC';
+create database $DB_NAME owner $DB_USER;
 
 \q
 ```
@@ -49,7 +51,7 @@ create database eapteka_db owner eapteka;
 - `python manage.py migrate` для накатки миграций
 - `python manage.py createsuperuser` для создания суперюзера
 
-6. Для загрузки первоначальных данных `python manage.py upload_data`
+6. Для загрузки первоначальных данных `python manage.py upload_data`, для обогащения препаратов ссылками  `python manage.py update_img_url`
 
 ## Links for localhost
 [Admin page](http://localhost:8000/admin)
@@ -59,10 +61,6 @@ create database eapteka_db owner eapteka;
 [ReDoc](http://localhost:8000/redoc)
 
 [Flower](http://localhost:5555/)
-
-Example request:
-
-curl -X GET "http://127.0.0.1:8000/api/course/" -H  "accept: application/json" -H  "X-CSRFToken: ZbLfdjXm1B3m4EP3ty7KXf9jvpwLHgBBcG49SmXZ32EV6QoY1BMjcKwkD7XVJ8vy"
 
 ### Форматирование кода
 - `make format`
