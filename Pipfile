@@ -1,0 +1,29 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = false
+
+[dev-packages]
+autopep8 = "*"
+black = "==19.10b0"
+isort = "==4.3.21"
+flake8 = "==3.9.0"
+pre-commit = "*"
+pytest = "*"
+pytest-django = "*"
+
+[packages]
+django = "==3.1.6"
+djangorestframework = "==3.12.2"
+gunicorn = "*"
+psycopg2-binary = "*"
+autoflake = "*"
+flower = "*"
+celery = "==4.4.7"
+redis = "*"
+environs = "*"
+drf-yasg = "*"
+django-minio-storage = "*"
+
+[requires]
+python_version = "3.8"
